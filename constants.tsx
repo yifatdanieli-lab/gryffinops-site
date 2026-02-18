@@ -43,7 +43,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     imageUrl:
       'https://raw.githubusercontent.com/yifatdanieli-lab/marketing-ops-team-assets/main/team/noa.png',
     colorHex: COLORS.noa,
-    specialties: ['FUNNEL', 'STRATEGY', 'ENRICHMENT' 'ABM'],
+    specialties: ['FUNNEL', 'STRATEGY', 'ENRICHMENT', 'ABM'],
     projects: [
       { id: 'p10', name: 'Global Flux Ritual', description: 'Standardizing operations across all regions.' }
     ]
