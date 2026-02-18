@@ -1,0 +1,7 @@
+{
+  "name": "Marketing Ops & Tech - Busy Doing Magic",
+  "description": "A Harry Potter themed team portal for the Marketing Ops & Tech team, featuring magical animations and interactive member profiles.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
