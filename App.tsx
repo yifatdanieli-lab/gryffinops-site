@@ -11,27 +11,28 @@ const App: React.FC = () => {
 
   // Start music on first interaction
   useEffect(() => {
-    const handleFirstInteraction = () => {
+    const startMusic = () => {
       if (audioRef.current && !isMusicPlaying) {
-        audioRef.current.play().catch(() => {});
-        setIsMusicPlaying(true);
+        audioRef.current.play().then(() => {
+          setIsMusicPlaying(true);
+        }).catch(() => {});
       }
 
-      window.removeEventListener('click', handleFirstInteraction);
-      window.removeEventListener('scroll', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
+      window.removeEventListener('click', startMusic);
+      window.removeEventListener('scroll', startMusic);
+      window.removeEventListener('touchstart', startMusic);
     };
 
-    window.addEventListener('click', handleFirstInteraction);
-    window.addEventListener('scroll', handleFirstInteraction);
-    window.addEventListener('touchstart', handleFirstInteraction);
+    window.addEventListener('click', startMusic);
+    window.addEventListener('scroll', startMusic);
+    window.addEventListener('touchstart', startMusic);
 
     return () => {
-      window.removeEventListener('click', handleFirstInteraction);
-      window.removeEventListener('scroll', handleFirstInteraction);
-      window.removeEventListener('touchstart', handleFirstInteraction);
+      window.removeEventListener('click', startMusic);
+      window.removeEventListener('scroll', startMusic);
+      window.removeEventListener('touchstart', startMusic);
     };
-  }, [isMusicPlaying]);
+  }, []); // ← בלי תלות ב-state
 
   const Portrait: React.FC<{ member: TeamMember; index: number }> = ({ member, index }) => {
     const [imgError, setImgError] = useState(false);
@@ -73,17 +74,19 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-32">
       <MagicCursor />
 
-      {/* Powerful visible music indicator */}
-      {isMusicPlaying && (
-        <div className="fixed top-6 right-6 z-50 pointer-events-none">
-          <div className="relative text-[#f3e5ab] text-4xl animate-musicFloat drop-shadow-[0_0_15px_rgba(243,229,171,0.8)]">
-            ♪
-            <span className="absolute inset-0 blur-lg opacity-40 text-[#ffd700]">
-              ♪
-            </span>
-          </div>
+      {/* Desktop music indicator */}
+      <div className="hidden sm:block fixed top-6 right-6 z-50 pointer-events-none">
+        <div className={`text-4xl text-[#f3e5ab] transition-opacity duration-500 ${isMusicPlaying ? 'opacity-100 animate-musicFloat' : 'opacity-60'}`}>
+          ♪
         </div>
-      )}
+      </div>
+
+      {/* Mobile music indicator */}
+      <div className="sm:hidden fixed top-3 right-4 z-50 pointer-events-none">
+        <div className={`text-5xl text-[#ffd700] drop-shadow-[0_0_12px_rgba(255,215,0,0.9)] transition-opacity duration-500 ${isMusicPlaying ? 'opacity-100 animate-musicFloat' : 'opacity-70'}`}>
+          ♪
+        </div>
+      </div>
 
       <audio
         ref={audioRef}
@@ -114,12 +117,12 @@ const App: React.FC = () => {
         {`
         @keyframes musicFloat {
           0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-6px) rotate(4deg); }
+          50% { transform: translateY(-5px) rotate(3deg); }
           100% { transform: translateY(0px) rotate(0deg); }
         }
 
         .animate-musicFloat {
-          animation: musicFloat 3.5s ease-in-out infinite;
+          animation: musicFloat 3s ease-in-out infinite;
         }
         `}
       </style>
