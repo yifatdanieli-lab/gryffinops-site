@@ -73,7 +73,6 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-20 sm:pb-32">
       <MagicCursor />
 
-      {/* START OVERLAY */}
       {!hasStarted && (
         <div
           onClick={startExperience}
@@ -88,7 +87,6 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* DESKTOP SOUND BUTTON */}
       <div
         onClick={toggleSound}
         className="hidden sm:flex fixed top-6 right-6 z-50 cursor-pointer"
@@ -97,7 +95,6 @@ const App: React.FC = () => {
           <span className={`text-5xl ${isMusicPlaying ? 'text-white animate-note' : 'text-[#888]'}`}>
             ♪
           </span>
-
           {!isMusicPlaying && (
             <div className="absolute w-full h-[3px] bg-red-500 rotate-45"></div>
           )}
@@ -120,13 +117,6 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* DESKTOP TITLE */}
-      <div className="hidden sm:block w-full text-center mt-10">
-        <h2 className="font-hp text-3xl text-[#f3e5ab] uppercase tracking-widest">
-          The GryffinOps Team
-        </h2>
-      </div>
-
       {/* MOBILE BANNER */}
       <div className="sm:hidden w-full relative z-10 overflow-hidden">
         <img
@@ -134,32 +124,6 @@ const App: React.FC = () => {
           alt="GryffinOps Mobile"
           className="w-full h-auto object-cover"
         />
-      </div>
-
-      {/* MOBILE TITLE */}
-      <div className="sm:hidden w-full text-center mt-6">
-        <h2 className="font-hp text-2xl text-[#f3e5ab] uppercase tracking-widest">
-          The GryffinOps Team
-        </h2>
-        <p className="font-parchment text-[#d3a625] italic mt-2 tracking-wide">
-          Busy doing magic.
-        </p>
-      </div>
-
-      {/* MOBILE SOUND BUTTON */}
-      <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-2">
-        <div
-          onClick={toggleSound}
-          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#ffffff20] cursor-pointer"
-        >
-          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
-            ♪
-          </span>
-
-          {!isMusicPlaying && (
-            <div className="absolute w-full h-[3px] bg-red-500 rotate-45"></div>
-          )}
-        </div>
       </div>
 
       {/* TEAM SECTION */}
@@ -176,6 +140,13 @@ const App: React.FC = () => {
           {TEAM_MEMBERS.map((member, index) => (
             <Portrait key={member.id} member={member} index={index} />
           ))}
+        </div>
+
+        {/* MOBILE ONLY VOTE TEXT */}
+        <div className="sm:hidden mt-16 text-center">
+          <h2 className="font-hp text-3xl text-[#f3e5ab] uppercase tracking-widest drop-shadow-[0_0_8px_rgba(243,229,171,0.7)]">
+            Vote GryffinOps!
+          </h2>
         </div>
       </main>
 
