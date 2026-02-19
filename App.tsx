@@ -9,30 +9,33 @@ const App: React.FC = () => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Start music on first interaction
+  // Reliable first interaction listener
   useEffect(() => {
-    const startMusic = () => {
-      if (audioRef.current && !isMusicPlaying) {
-        audioRef.current.play().then(() => {
-          setIsMusicPlaying(true);
-        }).catch(() => {});
+    const startMusic = async () => {
+      if (!audioRef.current) return;
+
+      try {
+        await audioRef.current.play();
+        setIsMusicPlaying(true);
+      } catch (err) {
+        console.log('Autoplay blocked until interaction');
       }
 
-      window.removeEventListener('click', startMusic);
-      window.removeEventListener('scroll', startMusic);
+      window.removeEventListener('pointerdown', startMusic);
       window.removeEventListener('touchstart', startMusic);
+      window.removeEventListener('keydown', startMusic);
     };
 
-    window.addEventListener('click', startMusic);
-    window.addEventListener('scroll', startMusic);
+    window.addEventListener('pointerdown', startMusic);
     window.addEventListener('touchstart', startMusic);
+    window.addEventListener('keydown', startMusic);
 
     return () => {
-      window.removeEventListener('click', startMusic);
-      window.removeEventListener('scroll', startMusic);
+      window.removeEventListener('pointerdown', startMusic);
       window.removeEventListener('touchstart', startMusic);
+      window.removeEventListener('keydown', startMusic);
     };
-  }, []); // ← בלי תלות ב-state
+  }, []);
 
   const Portrait: React.FC<{ member: TeamMember; index: number }> = ({ member, index }) => {
     const [imgError, setImgError] = useState(false);
@@ -58,7 +61,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="mt-5 text-center">
-            <h3 className="font-hp text-xl text-[#f3e5ab] group-hover:text-white transition-colors uppercase tracking-wider">
+            <h3 className="font-hp text-xl text-[#f3e5ab] group-hover:text-white uppercase tracking-wider">
               {member.name}
             </h3>
             <p className="font-parchment text-[10px] text-[#d3a625] italic tracking-widest uppercase mt-1 opacity-90">
@@ -74,17 +77,25 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-32">
       <MagicCursor />
 
-      {/* Desktop music indicator */}
-      <div className="hidden sm:block fixed top-6 right-6 z-50 pointer-events-none">
-        <div className={`text-4xl text-[#f3e5ab] transition-opacity duration-500 ${isMusicPlaying ? 'opacity-100 animate-musicFloat' : 'opacity-60'}`}>
-          ♪
+      {/* DESKTOP MUSIC INDICATOR */}
+      <div className="hidden sm:flex fixed top-6 right-6 z-50 pointer-events-none">
+        <div className={`relative flex items-center justify-center w-16 h-16 rounded-full 
+          ${isMusicPlaying ? 'bg-[#f3e5ab]/20 animate-pulseRing' : 'bg-[#ffffff10]'}
+        `}>
+          <span className={`text-3xl ${isMusicPlaying ? 'text-[#f3e5ab] animate-noteFloat' : 'text-[#888]'}`}>
+            ♪
+          </span>
         </div>
       </div>
 
-      {/* Mobile music indicator */}
-      <div className="sm:hidden fixed top-3 right-4 z-50 pointer-events-none">
-        <div className={`text-5xl text-[#ffd700] drop-shadow-[0_0_12px_rgba(255,215,0,0.9)] transition-opacity duration-500 ${isMusicPlaying ? 'opacity-100 animate-musicFloat' : 'opacity-70'}`}>
-          ♪
+      {/* MOBILE MUSIC INDICATOR – on black top area */}
+      <div className="sm:hidden fixed top-2 right-4 z-50 pointer-events-none">
+        <div className={`relative flex items-center justify-center w-14 h-14 rounded-full 
+          ${isMusicPlaying ? 'bg-[#ffd700]/25 animate-pulseRing' : 'bg-[#ffffff15]'}
+        `}>
+          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-noteFloat' : 'text-[#aaa]'}`}>
+            ♪
+          </span>
         </div>
       </div>
 
@@ -115,14 +126,24 @@ const App: React.FC = () => {
 
       <style>
         {`
-        @keyframes musicFloat {
-          0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-5px) rotate(3deg); }
-          100% { transform: translateY(0px) rotate(0deg); }
+        @keyframes noteFloat {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+          100% { transform: translateY(0px); }
         }
 
-        .animate-musicFloat {
-          animation: musicFloat 3s ease-in-out infinite;
+        @keyframes pulseRing {
+          0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.6); }
+          70% { box-shadow: 0 0 0 12px rgba(255,215,0,0); }
+          100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
+        }
+
+        .animate-noteFloat {
+          animation: noteFloat 2.5s ease-in-out infinite;
+        }
+
+        .animate-pulseRing {
+          animation: pulseRing 2.5s infinite;
         }
         `}
       </style>
