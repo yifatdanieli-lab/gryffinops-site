@@ -9,7 +9,7 @@ const App: React.FC = () => {
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // 🎵 Start music on first interaction (click / scroll / touch)
+  // Start music on first interaction
   useEffect(() => {
     const handleFirstInteraction = () => {
       if (audioRef.current && !isMusicPlaying) {
@@ -73,12 +73,14 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-32">
       <MagicCursor />
 
-      {/* 🎵 Elegant subtle music indicator */}
+      {/* Powerful visible music indicator */}
       {isMusicPlaying && (
         <div className="fixed top-6 right-6 z-50 pointer-events-none">
-          <div className="relative text-[#f3e5ab] text-xl opacity-60 animate-musicFloat">
+          <div className="relative text-[#f3e5ab] text-4xl animate-musicFloat drop-shadow-[0_0_15px_rgba(243,229,171,0.8)]">
             ♪
-            <span className="absolute inset-0 blur-md opacity-30">♪</span>
+            <span className="absolute inset-0 blur-lg opacity-40 text-[#ffd700]">
+              ♪
+            </span>
           </div>
         </div>
       )}
@@ -90,7 +92,6 @@ const App: React.FC = () => {
         preload="auto"
       />
 
-      {/* Banner */}
       <div className="w-full relative z-10 mb-24 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
         <img
           src={GRYFFINOPS_BANNER_URL}
@@ -99,7 +100,6 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* Team */}
       <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-32 w-full">
           {TEAM_MEMBERS.map((member, index) => (
@@ -110,17 +110,16 @@ const App: React.FC = () => {
 
       <ProfileModal member={selectedMember} onClose={() => setSelectedMember(null)} />
 
-      {/* Custom subtle animation */}
       <style>
         {`
         @keyframes musicFloat {
           0% { transform: translateY(0px) rotate(0deg); }
-          50% { transform: translateY(-3px) rotate(2deg); }
+          50% { transform: translateY(-6px) rotate(4deg); }
           100% { transform: translateY(0px) rotate(0deg); }
         }
 
         .animate-musicFloat {
-          animation: musicFloat 4s ease-in-out infinite;
+          animation: musicFloat 3.5s ease-in-out infinite;
         }
         `}
       </style>
