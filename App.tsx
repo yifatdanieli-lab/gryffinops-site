@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { TEAM_MEMBERS, GRYFFINOPS_BANNER_URL } from './constants';
 import { TeamMember } from './types';
 import ProfileModal from './components/ProfileModal';
@@ -7,34 +7,22 @@ import MagicCursor from './components/MagicCursor';
 const App: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    const tryPlay = async () => {
-      if (!audioRef.current) return;
+  const startExperience = async () => {
+    if (!audioRef.current) return;
 
-      try {
-        await audioRef.current.play();
-        setIsMusicPlaying(true);
-        removeListeners();
-      } catch (e) {
-        // אם הדפדפן חסם, ננסה שוב באינטראקציה הבאה
-      }
-    };
+    try {
+      await audioRef.current.play();
+      setIsMusicPlaying(true);
+    } catch (e) {}
 
-    const removeListeners = () => {
-      window.removeEventListener('pointerdown', tryPlay);
-      window.removeEventListener('touchstart', tryPlay);
-      window.removeEventListener('keydown', tryPlay);
-    };
-
-    window.addEventListener('pointerdown', tryPlay);
-    window.addEventListener('touchstart', tryPlay);
-    window.addEventListener('keydown', tryPlay);
-  }, []);
+    setHasStarted(true);
+  };
 
   const Portrait: React.FC<{ member: TeamMember; index: number }> = ({ member, index }) => {
-    const [imgError, setImgError] = useState(false);
+    const [imgError, setImgError] = React.useState(false);
 
     return (
       <div
@@ -73,23 +61,27 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-32">
       <MagicCursor />
 
+      {/* OVERLAY START SCREEN */}
+      {!hasStarted && (
+        <div
+          onClick={startExperience}
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-[100] cursor-pointer"
+        >
+          <div className="text-center text-[#f3e5ab]">
+            <div className="text-6xl mb-6 animate-pulse">♪</div>
+            <div className="font-hp tracking-widest uppercase text-lg">
+              Tap to Enter the Experience
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* DESKTOP MUSIC ICON */}
       <div className="hidden sm:flex fixed top-6 right-6 z-50 pointer-events-none">
         <div className={`relative flex items-center justify-center w-20 h-20 rounded-full 
-          ${isMusicPlaying ? 'bg-[#f3e5ab]/25 animate-ring' : 'bg-[#ffffff15]'}
+          ${isMusicPlaying ? 'bg-black/60 shadow-[0_0_20px_rgba(0,0,0,0.8)]' : 'bg-black/40'}
         `}>
-          <span className={`text-5xl ${isMusicPlaying ? 'text-[#f3e5ab] animate-note' : 'text-[#888]'}`}>
-            ♪
-          </span>
-        </div>
-      </div>
-
-      {/* MOBILE MUSIC ICON – positioned on black banner */}
-      <div className="sm:hidden fixed top-4 right-4 z-50 pointer-events-none">
-        <div className={`relative flex items-center justify-center w-16 h-16 rounded-full 
-          ${isMusicPlaying ? 'bg-[#ffd700]/30 animate-ring' : 'bg-[#ffffff20]'}
-        `}>
-          <span className={`text-5xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
+          <span className={`text-5xl ${isMusicPlaying ? 'text-[#ffffff] animate-note' : 'text-[#bbb]'}`}>
             ♪
           </span>
         </div>
@@ -102,14 +94,27 @@ const App: React.FC = () => {
         preload="auto"
       />
 
-      <div className="w-full relative z-10 mb-24 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+      {/* Banner */}
+      <div className="w-full relative z-10 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
         <img
           src={GRYFFINOPS_BANNER_URL}
           alt="GryffinOps"
-          className="w-full h-auto min-h-[40vh] object-cover animate-float"
+          className="w-full h-auto min-h-[50vh] sm:min-h-[40vh] object-cover animate-float"
         />
       </div>
 
+      {/* MOBILE MUSIC ICON ON BLACK STRIP */}
+      <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-3">
+        <div className={`relative flex items-center justify-center w-14 h-14 rounded-full 
+          ${isMusicPlaying ? 'bg-[#ffd700]/30 shadow-[0_0_15px_rgba(255,215,0,0.8)]' : 'bg-[#ffffff20]'}
+        `}>
+          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
+            ♪
+          </span>
+        </div>
+      </div>
+
+      {/* Team */}
       <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-32 w-full">
           {TEAM_MEMBERS.map((member, index) => (
@@ -124,22 +129,12 @@ const App: React.FC = () => {
         {`
         @keyframes note {
           0% { transform: translateY(0px); }
-          50% { transform: translateY(-8px); }
+          50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
-        }
-
-        @keyframes ring {
-          0% { box-shadow: 0 0 0 0 rgba(255,215,0,0.6); }
-          70% { box-shadow: 0 0 0 15px rgba(255,215,0,0); }
-          100% { box-shadow: 0 0 0 0 rgba(255,215,0,0); }
         }
 
         .animate-note {
           animation: note 2.5s ease-in-out infinite;
-        }
-
-        .animate-ring {
-          animation: ring 2.5s infinite;
         }
         `}
       </style>
