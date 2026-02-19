@@ -21,6 +21,18 @@ const App: React.FC = () => {
     setHasStarted(true);
   };
 
+  const toggleSound = () => {
+    if (!audioRef.current) return;
+
+    if (isMusicPlaying) {
+      audioRef.current.pause();
+      setIsMusicPlaying(false);
+    } else {
+      audioRef.current.play();
+      setIsMusicPlaying(true);
+    }
+  };
+
   const Portrait: React.FC<{ member: TeamMember; index: number }> = ({ member, index }) => {
     const [imgError, setImgError] = React.useState(false);
 
@@ -61,7 +73,7 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-32">
       <MagicCursor />
 
-      {/* OVERLAY START SCREEN */}
+      {/* Overlay Start */}
       {!hasStarted && (
         <div
           onClick={startExperience}
@@ -76,14 +88,35 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* DESKTOP MUSIC ICON */}
-      <div className="hidden sm:flex fixed top-6 right-6 z-50 pointer-events-none">
-        <div className={`relative flex items-center justify-center w-20 h-20 rounded-full 
-          ${isMusicPlaying ? 'bg-black/60 shadow-[0_0_20px_rgba(0,0,0,0.8)]' : 'bg-black/40'}
-        `}>
-          <span className={`text-5xl ${isMusicPlaying ? 'text-[#ffffff] animate-note' : 'text-[#bbb]'}`}>
+      {/* DESKTOP SOUND BUTTON */}
+      <div
+        onClick={toggleSound}
+        className="hidden sm:flex fixed top-6 right-6 z-50 cursor-pointer"
+      >
+        <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-black/60 shadow-[0_0_20px_rgba(0,0,0,0.8)]">
+          <span className={`text-5xl ${isMusicPlaying ? 'text-white animate-note' : 'text-[#888]'}`}>
             ♪
           </span>
+
+          {!isMusicPlaying && (
+            <div className="absolute w-full h-[3px] bg-red-500 rotate-45"></div>
+          )}
+        </div>
+      </div>
+
+      {/* MOBILE SOUND BUTTON */}
+      <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-3">
+        <div
+          onClick={toggleSound}
+          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#ffffff20] cursor-pointer"
+        >
+          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
+            ♪
+          </span>
+
+          {!isMusicPlaying && (
+            <div className="absolute w-full h-[3px] bg-red-500 rotate-45"></div>
+          )}
         </div>
       </div>
 
@@ -103,19 +136,8 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* MOBILE MUSIC ICON ON BLACK STRIP */}
-      <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-3">
-        <div className={`relative flex items-center justify-center w-14 h-14 rounded-full 
-          ${isMusicPlaying ? 'bg-[#ffd700]/30 shadow-[0_0_15px_rgba(255,215,0,0.8)]' : 'bg-[#ffffff20]'}
-        `}>
-          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
-            ♪
-          </span>
-        </div>
-      </div>
-
-      {/* Team */}
-      <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center">
+      {/* Team - add spacing only desktop */}
+      <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center mt-0 sm:mt-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-32 w-full">
           {TEAM_MEMBERS.map((member, index) => (
             <Portrait key={member.id} member={member} index={index} />
