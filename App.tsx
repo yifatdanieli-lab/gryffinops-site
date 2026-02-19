@@ -73,7 +73,7 @@ const App: React.FC = () => {
     <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-20 sm:pb-32">
       <MagicCursor />
 
-      {/* START OVERLAY (unchanged) */}
+      {/* START OVERLAY */}
       {!hasStarted && (
         <div
           onClick={startExperience}
@@ -88,7 +88,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* DESKTOP SOUND BUTTON (unchanged) */}
+      {/* DESKTOP SOUND BUTTON */}
       <div
         onClick={toggleSound}
         className="hidden sm:flex fixed top-6 right-6 z-50 cursor-pointer"
@@ -129,7 +129,7 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* MOBILE SOUND BUTTON (unchanged) */}
+      {/* MOBILE SOUND BUTTON */}
       <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-2">
         <div
           onClick={toggleSound}
@@ -146,12 +146,16 @@ const App: React.FC = () => {
       </div>
 
       {/* TEAM SECTION */}
-      <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center 
-                       mt-4 sm:mt-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
-                        gap-y-16 sm:gap-y-32 
-                        gap-x-6 sm:gap-x-20 
-                        w-full">
+      <main
+        className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center 
+                   mt-4 sm:mt-24"
+      >
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
+                     gap-y-16 sm:gap-y-32 
+                     gap-x-6 sm:gap-x-20 
+                     w-full"
+        >
           {TEAM_MEMBERS.map((member, index) => (
             <Portrait key={member.id} member={member} index={index} />
           ))}
