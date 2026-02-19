@@ -70,10 +70,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-32">
+    <div className="min-h-screen relative flex flex-col items-center bg-[#050505] overflow-y-auto pb-20 sm:pb-32">
       <MagicCursor />
 
-      {/* Overlay Start */}
+      {/* START OVERLAY (unchanged) */}
       {!hasStarted && (
         <div
           onClick={startExperience}
@@ -88,29 +88,13 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* DESKTOP SOUND BUTTON */}
+      {/* DESKTOP SOUND BUTTON (unchanged) */}
       <div
         onClick={toggleSound}
         className="hidden sm:flex fixed top-6 right-6 z-50 cursor-pointer"
       >
         <div className="relative flex items-center justify-center w-20 h-20 rounded-full bg-black/60 shadow-[0_0_20px_rgba(0,0,0,0.8)]">
           <span className={`text-5xl ${isMusicPlaying ? 'text-white animate-note' : 'text-[#888]'}`}>
-            ♪
-          </span>
-
-          {!isMusicPlaying && (
-            <div className="absolute w-full h-[3px] bg-red-500 rotate-45"></div>
-          )}
-        </div>
-      </div>
-
-      {/* MOBILE SOUND BUTTON */}
-      <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-3">
-        <div
-          onClick={toggleSound}
-          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#ffffff20] cursor-pointer"
-        >
-          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
             ♪
           </span>
 
@@ -127,18 +111,47 @@ const App: React.FC = () => {
         preload="auto"
       />
 
-      {/* Banner */}
-      <div className="w-full relative z-10 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
+      {/* DESKTOP BANNER */}
+      <div className="hidden sm:block w-full relative z-10 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.9)]">
         <img
           src={GRYFFINOPS_BANNER_URL}
           alt="GryffinOps"
-          className="w-full h-auto min-h-[50vh] sm:min-h-[40vh] object-cover animate-float"
+          className="w-full h-auto min-h-[40vh] object-cover animate-float"
         />
       </div>
 
-      {/* Team - add spacing only desktop */}
-      <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center mt-0 sm:mt-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-20 gap-y-32 w-full">
+      {/* MOBILE BANNER */}
+      <div className="sm:hidden w-full relative z-10 overflow-hidden">
+        <img
+          src="/banner-mobile.jpg"
+          alt="GryffinOps Mobile"
+          className="w-full h-auto object-cover"
+        />
+      </div>
+
+      {/* MOBILE SOUND BUTTON (unchanged) */}
+      <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-2">
+        <div
+          onClick={toggleSound}
+          className="relative flex items-center justify-center w-14 h-14 rounded-full bg-[#ffffff20] cursor-pointer"
+        >
+          <span className={`text-4xl ${isMusicPlaying ? 'text-[#ffd700] animate-note' : 'text-[#aaa]'}`}>
+            ♪
+          </span>
+
+          {!isMusicPlaying && (
+            <div className="absolute w-full h-[3px] bg-red-500 rotate-45"></div>
+          )}
+        </div>
+      </div>
+
+      {/* TEAM SECTION */}
+      <main className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center 
+                       mt-4 sm:mt-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
+                        gap-y-16 sm:gap-y-32 
+                        gap-x-6 sm:gap-x-20 
+                        w-full">
           {TEAM_MEMBERS.map((member, index) => (
             <Portrait key={member.id} member={member} index={index} />
           ))}
