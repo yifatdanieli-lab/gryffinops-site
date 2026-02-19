@@ -12,18 +12,15 @@ const App: React.FC = () => {
 
   const startExperience = async () => {
     if (!audioRef.current) return;
-
     try {
       await audioRef.current.play();
       setIsMusicPlaying(true);
     } catch (e) {}
-
     setHasStarted(true);
   };
 
   const toggleSound = () => {
     if (!audioRef.current) return;
-
     if (isMusicPlaying) {
       audioRef.current.pause();
       setIsMusicPlaying(false);
@@ -87,6 +84,7 @@ const App: React.FC = () => {
         </div>
       )}
 
+      {/* DESKTOP SOUND BUTTON */}
       <div
         onClick={toggleSound}
         className="hidden sm:flex fixed top-6 right-6 z-50 cursor-pointer"
@@ -117,6 +115,13 @@ const App: React.FC = () => {
         />
       </div>
 
+      {/* DESKTOP TITLE */}
+      <div className="hidden sm:block w-full text-center mt-10">
+        <h2 className="font-hp text-4xl text-[#f3e5ab] uppercase tracking-widest drop-shadow-[0_0_10px_rgba(243,229,171,0.7)]">
+          Vote GryffinOps!
+        </h2>
+      </div>
+
       {/* MOBILE BANNER */}
       <div className="sm:hidden w-full relative z-10 overflow-hidden">
         <img
@@ -124,6 +129,16 @@ const App: React.FC = () => {
           alt="GryffinOps Mobile"
           className="w-full h-auto object-cover"
         />
+      </div>
+
+      {/* MOBILE TITLE */}
+      <div className="sm:hidden w-full text-center mt-6">
+        <h2 className="font-hp text-2xl text-[#f3e5ab] uppercase tracking-widest">
+          The GryffinOps Team
+        </h2>
+        <p className="font-parchment text-[#d3a625] italic mt-2 tracking-wide">
+          Busy doing magic.
+        </p>
       </div>
 
       {/* TEAM SECTION */}
@@ -142,7 +157,7 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* MOBILE ONLY VOTE TEXT */}
+        {/* MOBILE ONLY BOTTOM TEXT */}
         <div className="sm:hidden mt-16 text-center">
           <h2 className="font-hp text-3xl text-[#f3e5ab] uppercase tracking-widest drop-shadow-[0_0_8px_rgba(243,229,171,0.7)]">
             Vote GryffinOps!
@@ -159,7 +174,6 @@ const App: React.FC = () => {
           50% { transform: translateY(-6px); }
           100% { transform: translateY(0px); }
         }
-
         .animate-note {
           animation: note 2.5s ease-in-out infinite;
         }
