@@ -120,6 +120,13 @@ const App: React.FC = () => {
         />
       </div>
 
+      {/* DESKTOP TITLE */}
+      <div className="hidden sm:block w-full text-center mt-10">
+        <h2 className="font-hp text-3xl text-[#f3e5ab] uppercase tracking-widest">
+          The GryffinOps Team
+        </h2>
+      </div>
+
       {/* MOBILE BANNER */}
       <div className="sm:hidden w-full relative z-10 overflow-hidden">
         <img
@@ -127,6 +134,16 @@ const App: React.FC = () => {
           alt="GryffinOps Mobile"
           className="w-full h-auto object-cover"
         />
+      </div>
+
+      {/* MOBILE TITLE */}
+      <div className="sm:hidden w-full text-center mt-6">
+        <h2 className="font-hp text-2xl text-[#f3e5ab] uppercase tracking-widest">
+          The GryffinOps Team
+        </h2>
+        <p className="font-parchment text-[#d3a625] italic mt-2 tracking-wide">
+          Busy doing magic.
+        </p>
       </div>
 
       {/* MOBILE SOUND BUTTON */}
@@ -148,7 +165,7 @@ const App: React.FC = () => {
       {/* TEAM SECTION */}
       <main
         className="w-full max-w-7xl px-6 flex-grow relative z-10 flex flex-col items-center 
-                   mt-4 sm:mt-24"
+                   mt-6 sm:mt-24"
       >
         <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 
