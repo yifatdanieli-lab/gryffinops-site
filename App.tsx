@@ -124,7 +124,7 @@ const App: React.FC = () => {
         />
       </div>
 
-      {/* MOBILE BLACK STRIP WITH MUTE BUTTON */}
+      {/* MOBILE SOUND BUTTON */}
       <div className="sm:hidden w-full bg-[#050505] flex justify-end pr-6 py-2">
         <div
           onClick={toggleSound}
@@ -139,7 +139,7 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* MOBILE TITLE (נשאר רגיל מתחת לפס) */}
+      {/* MOBILE TITLE */}
       <div className="sm:hidden w-full text-center mt-6">
         <h2 className="font-hp text-2xl text-[#f3e5ab] uppercase tracking-widest">
           The GryffinOps Team
@@ -163,6 +163,13 @@ const App: React.FC = () => {
           {TEAM_MEMBERS.map((member, index) => (
             <Portrait key={member.id} member={member} index={index} />
           ))}
+        </div>
+
+        {/* MOBILE BOTTOM TEXT */}
+        <div className="sm:hidden mt-20 text-center">
+          <h2 className="font-hp text-3xl text-[#f3e5ab] uppercase tracking-widest drop-shadow-[0_0_10px_rgba(243,229,171,0.8)]">
+            Vote GryffinOps!
+          </h2>
         </div>
       </main>
 
